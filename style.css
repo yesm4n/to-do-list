@@ -1,0 +1,246 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+:root {
+  --blue-blue: hsl(220, 98%, 61%);
+  --background-linear: linear-gradient(
+    135deg,
+    hsl(192, 100%, 67%),
+    hsl(280, 87%, 65%)
+  );
+
+  /* Light mode colors */
+
+  --gray1: hsl(0, 0%, 98%);
+  --gray2: hsl(236, 33%, 92%);
+  --gray3: hsl(233, 11%, 84%);
+  --gray4: hsl(236, 9%, 61%);
+  --gray5: hsl(235, 19%, 35%);
+
+  /* Dark mode colors */
+
+  --blue1: hsl(234, 39%, 85%);
+  --blue2: hsl(234, 11%, 52%);
+  --blue3: hsl(233, 14%, 35%);
+  --blue4: hsl(237, 14%, 26%);
+  --blue5: hsl(235, 24%, 19%);
+  --blue6: hsl(235, 21%, 11%);
+}
+
+.lightMode {
+  --bg: var(--gray2);
+  --h1: var(--gray1);
+  --input-item: var(--gray1);
+  --list-item: var(--gray1);
+  --input-placeholder: var(--gray5);
+  --list-text: var(--gray5);
+  --text-text: var(--gray4);
+  --list-item__span: var(--gray5);
+  --re-order-list: var(--gray4);
+}
+
+.darkMode {
+  --bg: var(--blue6);
+  --h1: var(--gray1);
+  --input-item: var(--blue5);
+  --list-item: var(--blue4);
+  --input-placeholder: var(--blue1);
+  --list-text: var(--blue1);
+  --text-text: var(--gray4);
+  --list-item__span: var(--blue6);
+  --re-order-list: var(--gray4);
+  --hover: var(--gray1);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 15px;
+  color: var(--h1);
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+ul,
+li {
+  font-size: 18px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+input {
+  font-size: 18px;
+  outline: none;
+  border: none;
+  background-color: var(--input-item);
+  color: var(--input-placeholder);
+}
+
+input::placeholder {
+  color: var(--input);
+}
+
+/* Images */
+
+.background-image-light {
+  background-image: url(images/bg-desktop-light.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 300px;
+}
+
+.background-image-dark {
+  background-image: url(images/bg-desktop-dark.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 300px;
+}
+
+.background-image-light-phone {
+  background-image: url(images/bg-mobile-light.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 300px;
+}
+
+.background-image-dark-phone {
+  background-image: url(images/bg-mobile-dark.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 300px;
+}
+
+/* Containers */
+
+.container {
+  width: 95%;
+  max-width: 35rem;
+  margin: auto;
+}
+
+.container-heading {
+  padding: 100px 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* INPUT ITEM */
+
+.input-item {
+  border-radius: 5px;
+  position: relative;
+  bottom: 100px;
+  display: grid;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--input-item);
+  border-bottom: 1px solid var(--input-item);
+}
+
+/* LIST ITEM */
+
+.list-item {
+  border-radius: 5px;
+  position: relative;
+  bottom: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--input-item);
+  border-bottom: 1px solid var(--input-item);
+}
+
+/* Lis item children */
+
+.list-item__span {
+  display: flex;
+  gap: 1rem;
+}
+
+.list-text {
+  margin-right: auto;
+  color: var(--list-text);
+}
+
+.re-order-list {
+  text-align: center;
+  color: var(--re-order-list);
+}
+
+.text {
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text-text);
+}
+
+.lightMode .text:hover {
+  color: var(--blue-blue);
+}
+
+.darkMode .text:hover {
+  color: var(--hover);
+}
+
+/* Components */
+
+.icon {
+  cursor: pointer;
+}
+
+.icon-check {
+  cursor: pointer;
+  border: 1px solid var(--gray3);
+  padding: 0.5rem;
+  margin-right: 20px;
+  border-radius: 100%;
+}
+
+.lightMode .icon-check.active {
+  border: 1px solid var(--input-item);
+  background: var(--background-linear);
+}
+
+.darkMode .icon-check.active {
+  border: 1px solid var(--input-item);
+  background: var(--background-linear);
+}
+
+.icon-cross {
+  cursor: pointer;
+}
+
+.icon-cross:hover {
+  transform: scale(1.2);
+}
+
+/* Media queries */
+
+@media (max-width: 430px) {
+  .background-image-dark {
+    background-image: url(images/bg-mobile-dark.jpg);
+  }
+
+  .background-image-light {
+    background-image: url(images/bg-mobile-light.jpg);
+  }
+  .list-item__span {
+    display: none;
+  }
+}
