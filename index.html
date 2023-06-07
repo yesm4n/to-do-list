@@ -2,49 +2,46 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Do List</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="images/favicon-32x32.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="app.js" defer></script>
 </head>
 
-<body class="lightMode">
+<body class="light-theme">
 
-    <div class="background-image-light">
-        <div class="container container-heading">
+    <div class="image light">
+        <div class="container hero">
             <h1>todo</h1>
-            <img class="icon" src="images/icon-moon.svg" alt="">
+            <img class="icon" src="images/icon-moon.svg" alt="theme switcher" data-icon>
         </div>
-    </div>
-    <div class="container container-ul">
-        <div class='input-item'>
-            <input type="text" id="input" placeholder="Write here" spellcheck="false" autofocus>
-        </div>
-        <ul id="myUl" class="d-container">
-            <!-- <div class="list-item">
-                <img class="icon-check" src="images/icon-check.svg" alt="">
-                <li class="list-text"></li>
-                <img class="icon-cross" src="images/icon-cross.svg" alt="">
-            </div> -->
-        </ul>
-        <div class="list-item">
-            <span class="text text-items">0 items left</span>
-            <div class="list-item__span">
-                <span class="text text-all"> All </span>
-                <span class="text text-active"> Active </span>
-                <span class="text text-completed">Completed</span>
-            </div>
-            <span class="text text-clear">Clear Completed</span>
-        </div>
-        <p class="re-order-list"> Drag and drop to re-oder list</p>
     </div>
 
+    <div class="main">
+        <input type="text" class="container list input" data-input>
+        <ul data-ul-list>
+            <!-- 
+            
+            -->
+        </ul>
+
+        <div class="container list btn-style">
+            <button class="btn" data-items-left>0 items left</button>
+            <div>
+                <button class="btn" data-button-all>All</button>
+                <button class="btn btn-active">Active</button>
+                <button class="btn btn-completed">Completed</button>
+            </div>
+            <button class="btn" data-button-clear>Clear Completed</button>
+        </div>
+
+        <p class="drag-and-drop">Drag and drop to reorder list</p>
+    </div>
 
 </body>
 
