@@ -1,172 +1,183 @@
-"use strict";
+'use strict';
 
-let counter = 0;
+// Global data variables
+const body = document.querySelector('body');
+const background = document.querySelector('.image');
+const icon = document.querySelector('[data-icon]');
+const input = document.querySelector('[data-input]');
+const ul = document.querySelector('[data-ul-list]');
 
-// Dark & Light mode settings
-const bodyClasses = document.body.classList;
-const backgroundImage = document.querySelector(".background-image-light");
-const toggleIcon = document.querySelector(".icon");
+// Theme
 let condition = false;
-
-function setDarkMode() {
-  condition = true;
-  bodyClasses.remove("lightMode");
-  bodyClasses.add("darkMode");
-  backgroundImage.classList.remove("background-image-light");
-  backgroundImage.classList.add("background-image-dark");
-  toggleIcon.setAttribute("src", "images/icon-sun.svg");
-  localStorage.setItem("theme", "darkMode");
+const theme = localStorage.getItem('theme');
+if (theme === 'dark-theme') {
+  darkTheme();
+} else {
+  lightTheme();
 }
 
-function setLightMode() {
-  condition = false;
-  bodyClasses.remove("darkMode");
-  bodyClasses.add("lightMode");
-  backgroundImage.classList.add("background-image-light");
-  backgroundImage.classList.remove("background-image-dark");
-  toggleIcon.setAttribute("src", "images/icon-moon.svg");
-  localStorage.setItem("theme", "lightMode");
-}
-
-// Event listener for dark & light mode
-toggleIcon.addEventListener("click", () => {
+// Dark & Light toggle
+icon.addEventListener('click', () => {
   if (condition === false) {
-    setDarkMode();
+    darkTheme();
   } else {
-    setLightMode();
+    lightTheme();
   }
 });
 
-// Check local storage for theme preference
-const theme = localStorage.getItem("theme");
-if (theme === "darkMode") {
-  setDarkMode();
-} else if (theme === "lightMode") {
-  setLightMode();
+// Set light theme
+function lightTheme() {
+  condition = false;
+  body.classList.remove('dark-theme');
+  body.classList.add('light-theme');
+  background.classList.remove('dark');
+  background.classList.add('light');
+  icon.setAttribute('src', 'images/icon-moon.svg');
+  localStorage.setItem('theme', 'light-theme');
 }
 
-// Creating new element for the to-do-list
-const input = document.getElementById("input");
-const myUl = document.getElementById("myUl");
-const textItems = document.querySelector(".text-items");
-const textClear = document.querySelector(".text-clear");
+// Set dark theme
+function darkTheme() {
+  condition = true;
+  body.classList.remove('light-theme');
+  body.classList.add('dark-theme');
+  background.classList.remove('light');
+  background.classList.add('dark');
+  icon.setAttribute('src', 'images/icon-sun.svg');
+  localStorage.setItem('theme', 'dark-theme');
+}
 
-input.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && input.value !== "") {
-    createNewElement();
+// Create new elements on Enter key press
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && input.value !== '') {
+    createElement();
+    updateItems();
   }
 });
 
-function createNewElement() {
-  const listItem = document.createElement("div");
-  listItem.classList.add("list-item");
-  counter++;
-  if (counter >= 1) {
-    listItem.classList.add("draggable");
-    listItem.setAttribute("draggable", true);
-    listItem.style.cursor = "move";
-    listItem.addEventListener("dragstart", () => {
-      listItem.classList.add("dragging");
+// Create new list item element
+function createElement() {
+  if (input.value === '') {
+    return;
+  } else {
+    let div = document.createElement('div');
+    div.classList.add('container');
+    div.classList.add('list-item');
+    div.classList.add('list');
+
+    // Drag and drop functionality
+    div.classList.add('draggable');
+    div.setAttribute('draggable', true);
+    div.addEventListener('dragstart', () => {
+      div.classList.add('dragging');
+    });
+    div.addEventListener('dragend', () => {
+      div.classList.remove('dragging');
     });
 
-    listItem.addEventListener("dragend", () => {
-      listItem.classList.remove("dragging");
-    });
-  }
-
-  const containerDragOver = document.querySelector(".d-container");
-  containerDragOver.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    const afterElement = getDragAfterElement(containerDragOver, e.clientY);
-    const draggable = document.querySelector(".dragging");
-    if (afterElement === null) {
-      containerDragOver.appendChild(draggable);
-    } else {
-      containerDragOver.insertBefore(draggable, afterElement);
-    }
-  });
-
-  function getDragAfterElement(containerDragOver, y) {
-    const draggableElements = [
-      ...containerDragOver.querySelectorAll(".draggable:not(.dragging)"),
-    ];
-
-    return draggableElements.reduce(
-      (closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      },
-      {
-        offset: Number.NEGATIVE_INFINITY,
+    ul.addEventListener('dragover', e => {
+      e.preventDefault();
+      const afterElement = getDragAfterElemet(ul, e.clientY);
+      const draggable = document.querySelector('.dragging');
+      if (afterElement == null) {
+        ul.appendChild(draggable);
+      } else {
+        ul.insertBefore(draggable, afterElement);
       }
-    ).element;
+      saveData();
+    });
+
+    // Images and text for the list item
+    let iconCheck = document.createElement('img');
+    iconCheck.classList.add('icon');
+    iconCheck.classList.add('icon-check');
+    iconCheck.src = 'images/icon-check.svg';
+    div.appendChild(iconCheck);
+
+    let li = document.createElement('li');
+    li.classList.add('margin-right');
+    li.innerHTML = input.value;
+    div.appendChild(li);
+
+    let iconCross = document.createElement('img');
+    iconCross.classList.add('icon');
+    iconCross.classList.add('icon-cross');
+    iconCross.src = 'images/icon-cross.svg';
+    div.appendChild(iconCross);
+
+    ul.appendChild(div);
   }
-
-  const iconCheck = document.createElement("img");
-  iconCheck.classList.add("icon-check");
-  iconCheck.src = "images/icon-check.svg";
-  listItem.appendChild(iconCheck);
-
-  const listItemText = document.createElement("li");
-  listItemText.classList.add("list-text");
-  const inputValue = input.value;
-  listItemText.textContent = inputValue;
-  listItem.appendChild(listItemText);
-
-  const iconCross = document.createElement("img");
-  iconCross.classList.add("icon-cross");
-  iconCross.src = "images/icon-cross.svg";
-  listItem.appendChild(iconCross);
-
-  iconCheck.addEventListener("click", () => {
-    if (iconCheck.classList.toggle("active")) {
-      listItemText.style.color = "var(--gray4)";
-      listItemText.style.textDecoration = "line-through";
-      counter--;
-      textItemsLeft();
-    } else {
-      listItemText.style.color = "";
-      listItemText.style.textDecoration = "";
-      counter++;
-      textItemsLeft();
-    }
-  });
-
-  iconCross.addEventListener("click", () => {
-    listItem.style.display = "none";
-    if (iconCheck.classList.contains("active")) {
-      textItemsLeft();
-    } else {
-      counter--;
-      textItemsLeft();
-    }
-  });
-
-  const firstListItem = myUl.querySelector(".list-item");
-  if (firstListItem) {
-    myUl.insertBefore(listItem, firstListItem);
-  } else {
-    myUl.appendChild(listItem);
-  }
-
-  input.value = "";
-
-  // Items counter update
-  function textItemsLeft() {
-    textItems.textContent = `${counter} items left`;
-  }
-
-  textItemsLeft();
-
-  // Clear completed items
-  textClear.addEventListener("click", () => {
-    if (iconCheck.classList.contains("active")) {
-      listItem.style.display = "none";
-    }
-  });
+  input.value = '';
+  saveData();
 }
+
+// Toggle class and remove list item on icon click
+ul.addEventListener('click', e => {
+  if (e.target.classList.contains('icon-cross')) {
+    e.target.parentElement.remove();
+    updateItems();
+    saveData();
+  } else if (e.target.classList.contains('icon-check')) {
+    e.target.classList.toggle('active');
+    const li = e.target.parentElement.querySelector('.margin-right');
+    li.classList.toggle('active');
+    saveData();
+  }
+});
+
+// Buttons
+const buttonItemsleft = document.querySelector('[data-items-left]');
+const buttonAll = document.querySelector('[data-button-all]');
+const buttonClear = document.querySelector('[data-button-clear]');
+
+// Update the number of items displayed
+function updateItems() {
+  let count;
+  localStorage.setItem('count', count);
+  count = document.querySelectorAll('.list-item').length;
+  buttonItemsleft.textContent = `${count} item${count !== 1 ? 's' : ''} left`;
+}
+
+// Update items on page load
+window.addEventListener('DOMContentLoaded', () => {
+  updateItems();
+});
+
+// Toggle all items between active and inactive
+buttonAll.addEventListener('click', () => {
+  const iconCheck = document.querySelectorAll('.icon-check');
+  const li = document.querySelectorAll('.margin-right');
+  iconCheck.forEach(icon => {
+    icon.classList.toggle('active');
+  });
+  li.forEach(list => {
+    list.classList.toggle('active');
+  });
+  saveData();
+});
+
+// Remove completed items
+buttonClear.addEventListener('click', () => {
+  const items = document.querySelectorAll('.list-item');
+  items.forEach(item => {
+    const icon = item.querySelector('.icon-check');
+    if (icon.classList.contains('active')) {
+      item.remove();
+      updateItems();
+    }
+  });
+  updateItems();
+  saveData();
+});
+
+// Save the list items in local storage
+function saveData() {
+  localStorage.setItem('element', ul.innerHTML);
+}
+
+// Load and display the list items from local storage
+function displayData() {
+  ul.innerHTML = localStorage.getItem('element');
+}
+
+displayData();
