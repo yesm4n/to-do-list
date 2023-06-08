@@ -77,7 +77,7 @@ function createElement() {
 
     ul.addEventListener('dragover', e => {
       e.preventDefault();
-      const afterElement = getDragAfterElemet(ul, e.clientY);
+      const afterElement = getDragAfterElement(ul, e.clientY);
       const draggable = document.querySelector('.dragging');
       if (afterElement == null) {
         ul.appendChild(draggable);
@@ -86,6 +86,27 @@ function createElement() {
       }
       saveData();
     });
+
+    function getDragAfterElement(ul, y) {
+      const draggableElements = [
+        ...ul.querySelectorAll('.draggable:not(.dragging)'),
+      ];
+
+      return draggableElements.reduce(
+        (closest, child) => {
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+          } else {
+            return closest;
+          }
+        },
+        {
+          offset: Number.NEGATIVE_INFINITY,
+        }
+      ).element;
+    }
 
     // Images and text for the list item
     let iconCheck = document.createElement('img');
